@@ -1,4 +1,4 @@
-# Data Models Ebook — Hands-on Labs
+# Data Models Ebook — Hands-on Labs (Updated)
 
 Companion lab exercises for the *Data Models* course textbook. Each lab aligns with a chapter in the ebook, using the same datasets and scenarios so you can run the queries, break the constraints, and observe the failures yourself.
 
