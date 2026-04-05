@@ -1,4 +1,4 @@
-# Topic 1 Lab — Scenario-Based Reasoning: Matching Models to Workloads d
+# Topic 1 Lab — Scenario-Based Reasoning: Matching Models to Workloads
 
 This is a reasoning lab, not a coding lab. Part A checks your command of the chapter's vocabulary and decision framework. Parts B and C apply that framework to realistic scenarios, building the conceptual foundation that Topics 2–10 depend on.
 
