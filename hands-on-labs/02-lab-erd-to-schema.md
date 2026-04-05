@@ -1,4 +1,4 @@
-# Topic 2 Lab — ERD Construction and Schema Translation d
+# Topic 2 Lab — ERD Construction and Schema Translation
 
 This is a design lab, not a coding lab. Part 1 builds an Entity-Relationship Diagram incrementally using ERDPlus. Part 2 translates that ERD to a relational schema using dbdiagram.io and verifies the round-trip. Two standalone exercises (weak entity and self-reference) extend the core patterns.
 
