@@ -1,6 +1,6 @@
 # Data Models Ebook
 
-This book is designed to be read in order. Each chapter builds on the vocabulary, schemas, and case studies introduced in earlier chapters. Cross-references point back to the specific section where a concept was first developed.
+This course textbook is designed to be read in order. Each chapter builds on the vocabulary, schemas, and case studies introduced in earlier chapters. Cross-references point back to the specific section where a concept was first developed.
 
 ## Hands-on Labs
 
