@@ -4,6 +4,26 @@ Companion lab exercises for the *Data Models* course textbook. Each lab aligns w
 
 Google Colab notebooks run in the browser — no local installation required. Markdown labs are pen-and-paper or discussion exercises.
 
+## The Course Textbook
+
+The textbook covers five data models — relational, document, XML/schema validation, RDF/knowledge graphs, and property graphs — each taught through the lens of workload trade-offs. Every chapter opens with a concrete engineering failure and builds the vocabulary to prevent it.
+
+| Chapter | Title |
+|---------|-------|
+| 1 | Introduction to Data Models |
+| 2 | Conceptual Modelling with ERD |
+| 3 | Normalisation |
+| 4 | SQL Querying |
+| 5 | Enforcement |
+| 6 | Document Modelling |
+| 7 | XML for Contracts |
+| 8 | RDF and Knowledge Graphs |
+| 9 | SPARQL Querying Knowledge Graphs |
+| 10 | Property Graphs and Cypher Traversal |
+| 11 | Multi-Model Capstone |
+
+**Download:** [`book/data-models-ebook.epub`](book/data-models-ebook.epub) — open with any epub reader ([Calibre](https://calibre-ebook.com/), [Apple Books](https://www.apple.com/apple-books/), [Thorium Reader](https://www.edrlab.org/software/thorium-reader/), or your e-reader device).
+
 ## Labs
 
 | # | Lab | Technologies | Open |
@@ -38,6 +58,7 @@ See [`resources/README.md`](resources/README.md) for full file inventories, nami
 
 ```
 data-models-ebook/
+├── book/                   The course textbook (epub)
 ├── hands-on-labs/          Lab exercises (Colab notebooks + Markdown)
 ├── resources/              Seed data, schemas, and generators by domain
 │   ├── orders-payments/        Labs 2–5 (relational)
