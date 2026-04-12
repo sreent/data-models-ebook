@@ -17,6 +17,8 @@ resources/
 ├── ridelink/            Chapters 1, 6, 11 (Super-app)
 │   ├── seed-data.js             Slide-ready MongoDB inserts (7 users, 4 plans)
 │   ├── seed-data.md             Documentation with teaching scenarios + walkthroughs
+│   ├── schema.md                Collection diagrams, field specs, design comparison
+│   ├── capstone-seed-data.md    Multi-model seed data (same entities, five representations)
 │   ├── generate-lab-data.py     Generator for lab dataset (200 users, both designs)
 │   └── lab-data.js              Generated lab data (auto-generated, do not edit)
 │

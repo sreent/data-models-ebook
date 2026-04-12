@@ -6,6 +6,25 @@ A minimal dataset for the Chapter 6 Document Modelling topic, small enough to tr
 
 ---
 
+## File Inventory
+
+| File | Purpose | Used in |
+|------|---------|---------|
+| `seed-data.js` | Slide-ready MongoDB inserts — Design A and Design B (7 users, 4 plans) | Lab 6 setup, slide examples |
+| `seed-data.md` | Documentation with teaching scenarios and walkthroughs | Reference for slide preparation |
+| `schema.md` | Document schema model — collection diagrams, field specifications, design comparison | Reference for Chapter 6 |
+| `capstone-seed-data.md` | Multi-model seed data — same entities in five representations | Lab 11 (Chapter 11 capstone) |
+| `generate-lab-data.py` | Generator for lab dataset (200 users, both designs) | Regeneration if needed |
+| `lab-data.js` | Generated lab data (auto-generated, do not edit) | Lab 6 exercises |
+
+---
+
+## Domain Context
+
+A simplified ride-hailing super-app inspired by platforms like Grab and Gojek. The domain covers three user roles — passengers, drivers, and food merchants — each with distinct profile shapes stored in the same MongoDB collection. The design prioritises **aggregate-shaped reads** (profile loads, dashboard renders) over cross-entity queries, placing it at a **high-trust, single-team boundary** where schema-on-read flexibility is acceptable and structural variation is a feature, not a bug.
+
+---
+
 ## Design A — Aggregate-First (Embedded)
 
 ### `users` Collection (7 documents)

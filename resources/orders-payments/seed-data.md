@@ -6,6 +6,25 @@ A minimal dataset for the Orders & Payments schema, small enough to trace by han
 
 ---
 
+## File Inventory
+
+| File | Purpose | Used in |
+|------|---------|---------|
+| `ddl.sql` | Schema definition (12 tables + triggers) | Lab setup (all labs) |
+| `seed-data.sql` | Slide-ready SQL INSERT statements (5 customers, 7 orders, 13 lines) | Labs 2–5 (slide examples, lab setup) |
+| `seed-data.md` | Documentation with teaching scenarios | Reference for slide preparation |
+| `schema.md` | ERD, DBML, constraint annotations, BCNF analysis | Reference for Chapters 2–3, 5 |
+| `large-data.sql` | Performance dataset (100K+ order lines) | Lab 5 (index selectivity, EXPLAIN) |
+| `generate-large.py` | Generator for large dataset (deterministic, seed 42) | Regeneration if needed |
+
+---
+
+## Domain Context
+
+A simplified B2B order management system for a Southeast Asian tech distributor. The domain covers the full purchase lifecycle — customers placing orders, order fulfilment with line items, payment processing, shipment tracking, and product reviews — with a sales organisation hierarchy (offices, managers, sales reps). The schema sits at a **single-system, high-trust boundary** where all data lives in one relational database with full ACID guarantees and engine-enforced constraints.
+
+---
+
 ## Data Tables
 
 ### postcodes
@@ -192,26 +211,26 @@ Sarah Tan (MD, Singapore)
 
 ## Teaching Scenarios Supported
 
-| Scenario | Chapter | What to show on slide |
+| Scenario | Concept | What to show on slide |
 |----------|---------|----------------------|
-| **Count inflation** | Ch4 | Alice: 2 orders, 3 line items. `COUNT(*)` after 3-table join = 3 (wrong). `COUNT(DISTINCT order_id)` = 2 (correct). |
-| **Silent data loss** | Ch4 | INNER JOIN customers → Order drops Eve (0 orders). LEFT JOIN keeps her with NULLs. |
-| **Anti-join** | Ch4 | product 6 (Screen) has no order_lines rows. Ho Chi Minh City office has no employees. `LEFT JOIN ... WHERE IS NULL` finds them. |
-| **FWGHOS trace** | Ch4 | Trace any query step by step: F (7 orders × avg 1.9 lines = 13 rows), W (filter), G (group), H (filter groups), O (sort), S (output). |
-| **Self-join** | Ch4 | employees with their manager: `employees e JOIN employees m ON e.manager_id = m.employee_id`. Sarah (MD) has NULL manager — LEFT JOIN preserves her. |
-| **NULL trap (NOT IN)** | Ch4 | `WHERE employee_id NOT IN (SELECT sales_rep_id FROM customers)` returns 0 rows because Eve's NULL `sales_rep_id` poisons `NOT IN`. Anti-join version works correctly. |
-| **NULL in aggregates** | Ch4 | `COUNT(*)` = 8 employees. `COUNT(commission_pct)` = 5 (managers have NULL commission). `commission_pct != NULL` returns 0 rows. |
-| **Salary comparison** | Ch4 | Rizal Pratama ($56k) earns more than his manager Budi Santoso ($55k). Self-join with WHERE filter. |
-| **BCNF decomposition** | Ch3 | postcodes → City extracted from customers into postcodes lookup. Both Alice and Dave share 018956 → Singapore (update once, correct everywhere). |
-| **Snapshot justification** | Ch3 | Shipping address frozen at ship time. If "Raffles Quay" is renamed, shipping records still show original address. |
-| **Derived attribute** | Ch3/Ch5 | `order_total` = SUM of line totals. Verify: Order 101 = 19.98 + 14.99 = 34.97 ✓ |
-| **Star schema derivation** | Ch3 | Fact: order_lines + order_date. Dimensions: products (with category), customers (with postcode/city), Time. |
-| **CHECK constraint** | Ch5 | `INSERT INTO order_lines VALUES (101, 6, -3, 199.99)` — rejected by `CHECK (quantity > 0)`. |
-| **UNIQUE constraint** | Ch5 | `INSERT INTO orders VALUES (108, 1, 'INV-2024-00101', ...)` — rejected (Alice already has INV-2024-00101). |
-| **CASCADE delete** | Ch5 | DELETE Order 101 → order_lines rows (101,1) and (101,2) also deleted. |
-| **Transaction demo** | Ch5 | Order 106 (pending): BEGIN → INSERT payments → UPDATE status → COMMIT. Or: simulate failure → ROLLBACK. |
-| **View + GRANT** | Ch5 | `revenue_by_product` view: Widget A total = (2×9.99) + (1×9.99) + (3×9.99) = 59.94. No customer emails visible. |
-| **Index selectivity** | Ch5 | `WHERE status = 'completed'` matches 4/7 (57% — low selectivity). `WHERE customer_id = 4` matches 1/7 (14% — higher selectivity). |
+| **Count inflation** | JOIN cardinality | Alice: 2 orders, 3 line items. `COUNT(*)` after 3-table join = 3 (wrong). `COUNT(DISTINCT order_id)` = 2 (correct). |
+| **Silent data loss** | INNER vs LEFT JOIN | INNER JOIN customers → Order drops Eve (0 orders). LEFT JOIN keeps her with NULLs. |
+| **Anti-join** | NULL-detection pattern | product 6 (Screen) has no order_lines rows. Ho Chi Minh City office has no employees. `LEFT JOIN ... WHERE IS NULL` finds them. |
+| **FWGHOS trace** | Query execution order | Trace any query step by step: F (7 orders × avg 1.9 lines = 13 rows), W (filter), G (group), H (filter groups), O (sort), S (output). |
+| **Self-join** | Self-referencing hierarchy | employees with their manager: `employees e JOIN employees m ON e.manager_id = m.employee_id`. Sarah (MD) has NULL manager — LEFT JOIN preserves her. |
+| **NULL trap (NOT IN)** | NULL semantics | `WHERE employee_id NOT IN (SELECT sales_rep_id FROM customers)` returns 0 rows because Eve's NULL `sales_rep_id` poisons `NOT IN`. Anti-join version works correctly. |
+| **NULL in aggregates** | NULL semantics | `COUNT(*)` = 8 employees. `COUNT(commission_pct)` = 5 (managers have NULL commission). `commission_pct != NULL` returns 0 rows. |
+| **Salary comparison** | Self-join with filter | Rizal Pratama ($56k) earns more than his manager Budi Santoso ($55k). Self-join with WHERE filter. |
+| **BCNF decomposition** | Normalisation | postcodes → City extracted from customers into postcodes lookup. Both Alice and Dave share 018956 → Singapore (update once, correct everywhere). |
+| **Snapshot justification** | Justified downshift | Shipping address frozen at ship time. If "Raffles Quay" is renamed, shipping records still show original address. |
+| **Derived attribute** | Redundancy management | `order_total` = SUM of line totals. Verify: Order 101 = 19.98 + 14.99 = 34.97 ✓ |
+| **Star schema derivation** | Dimensional modelling | Fact: order_lines + order_date. Dimensions: products (with category), customers (with postcode/city), Time. |
+| **CHECK constraint** | Domain constraints | `INSERT INTO order_lines VALUES (101, 6, -3, 199.99)` — rejected by `CHECK (quantity > 0)`. |
+| **UNIQUE constraint** | Key constraints | `INSERT INTO orders VALUES (108, 1, 'INV-2024-00101', ...)` — rejected (Alice already has INV-2024-00101). |
+| **CASCADE delete** | Referential actions | DELETE Order 101 → order_lines rows (101,1) and (101,2) also deleted. |
+| **Transaction demo** | ACID transactions | Order 106 (pending): BEGIN → INSERT payments → UPDATE status → COMMIT. Or: simulate failure → ROLLBACK. |
+| **View + GRANT** | Access control | `revenue_by_product` view: Widget A total = (2×9.99) + (1×9.99) + (3×9.99) = 59.94. No customer emails visible. |
+| **Index selectivity** | Query optimisation | `WHERE status = 'completed'` matches 4/7 (57% — low selectivity). `WHERE customer_id = 4` matches 1/7 (14% — higher selectivity). |
 
 ---
 

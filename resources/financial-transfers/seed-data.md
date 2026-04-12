@@ -141,15 +141,15 @@ Random transfers between background accounts. Covers all four transfer types, da
 
 ## Teaching Scenarios Supported
 
-| Scenario | Concept | Lab question |
-|----------|---------|-------------|
-| **Edge properties** | Data belongs on the edge, not on endpoints | Q1 (inspect transfer relationship) |
-| **Supernode identification** | Degree distribution, supernode as traversal bottleneck | Q2 (find highest in-degree node) |
-| **Effective degree** | Edge filtering reduces traversal cost | Q3(b) (filter >$5K, last 90 days) |
-| **Bounded traversal** | `*1..k` with `ALL(... WHERE ...)` | Q4–Q5 (predict-first, then execute) |
-| **Explosion demonstration** | Unbounded traversal from supernode | Q6(b) (remove all bounds from processor_001) |
-| **Cycle detection** | Same-variable pattern `(a)-[*3..6]->(a)` | Q7 (find rings, deduplicate) |
-| **Bottleneck estimation** | Minimum edge in cycle limits laundered volume | Q8 (reduce over ring edges) |
-| **Supernode handling** | Edge filtering vs node skipping | Q9–Q10 (two strategies compared) |
-| **Cross-model comparison** | SQL CTE vs SPARQL reified vs Cypher | Q11–Q13 (read, complete, compare) |
-| **Four-model synthesis** | Relational, document, RDF, property graph | Q14 (preparation for Chapter 11) |
+| Scenario | Concept | What to show on slide |
+|----------|---------|----------------------|
+| **Edge properties** | Data belongs on the edge, not on endpoints | Transfer amount, date, type live on `:TRANSFERRED_TO` — same semantics as Ch 2's associative entity, but structural rather than tabular. |
+| **Supernode identification** | Degree distribution, supernode as traversal bottleneck | processor_001 has 42 edges (19 in + 23 out). Any unbounded traversal that reaches it fans out to dozens of accounts. |
+| **Effective degree** | Edge filtering reduces traversal cost | acct_2049's raw degree drops when filtered to >$5K transfers in the last 90 days — fewer paths to explore. |
+| **Bounded traversal** | `*1..k` with `ALL(... WHERE ...)` | From acct_2049, 3 hops, >$5K, after 2024-01-02: reaches acct_3017 (depth 1), acct_7801 (depth 2), cycle back (depth 3). |
+| **Explosion demonstration** | Unbounded traversal from supernode | Remove all bounds from processor_001 — path count explodes combinatorially through the 42-edge hub. |
+| **Cycle detection** | Same-variable pattern `(a)-[*3..6]->(a)` | Ring 1 (length 3): acct_2049 → acct_3017 → acct_7801 → acct_2049. Ring 2 (length 4): acct_5566 → ... → acct_5566. |
+| **Bottleneck estimation** | Minimum edge in cycle limits laundered volume | Ring 1 bottleneck = $7,000 (return edge). Ring 2 bottleneck = $4,000 (final edge). Min edge caps laundered amount. |
+| **Supernode handling** | Edge filtering vs node skipping | Strategy 1: filter edges on processor_001. Strategy 2: skip Processor-type nodes entirely. Compare path counts and results. |
+| **Cross-model comparison** | SQL CTE vs SPARQL reified vs Cypher | Same 3-hop query in three languages: recursive CTE (verbose), SPARQL property paths (limited), Cypher (natural). |
+| **Four-model synthesis** | Relational, document, RDF, property graph | Each model handles the same transfer data differently — preparation for Chapter 11's multi-model architecture. |
